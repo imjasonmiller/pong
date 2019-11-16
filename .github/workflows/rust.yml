@@ -1,0 +1,29 @@
+name: Rust
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        include:
+          - os: ubuntu-latest
+            feature: vulkan
+            artifact: pong
+          - os: windows-latest
+            feature: vulkan
+            artifact: pong
+          - os: macos-latest
+            feature: metal
+            artifact: pong 
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build
+      run: cargo build --features ${{ matrix.feature }}
+    - name: Upload artifact
+      uses: actions/upload-artifact@v1.0.0
+      with:
+        name: ${{ matrix.os }}
+        path: target/debug/${{ matrix.artifact }}
