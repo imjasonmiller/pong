@@ -8,8 +8,14 @@ edition = "2018"
 
 [dependencies.amethyst]
 version = "0.13.2"
-features = ["vulkan"]
 
 [target.x86_64-apple-darwin.dependencies]
 objc = "=0.2.6"
+
+[features]
+default = ["vulkan"]
+empty = ["amethyst/empty"]
+metal = ["amethyst/metal"]
+vulkan = ["amethyst/vulkan"]
+nightly = ["amethyst/nightly"]
 
