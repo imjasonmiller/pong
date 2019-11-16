@@ -7,11 +7,7 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-amethyst = "0.13.2"
-
-# Fix build, see https://github.com/amethyst/amethyst/issues/2011
-[target.x86_64-apple-darwin.dependencies]
-objc = "0.2.6"
+amethyst = { git = "https://github.com/amethyst/amethyst", rev = "c02079adf4079cd2a47f6da25b6707b11f1bbf83" }
 
 [features]
 default = ["vulkan"]
