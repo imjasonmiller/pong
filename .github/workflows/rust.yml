@@ -10,13 +10,13 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
         include:
           - os: ubuntu-latest
-            feature: vulkan
+            feature: "vulkan"
             artifact: pong
           - os: windows-latest
-            feature: vulkan
+            feature: "vulkan"
             artifact: pong
           - os: macos-latest
-            feature: metal
+            feature: "metal"
             artifact: pong 
     steps:
     - uses: actions/checkout@v1
