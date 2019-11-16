@@ -13,16 +13,13 @@ jobs:
         include:
           - os: ubuntu-latest
             feature: vulkan
-            artifact_prefix: pong
-            target: x86_64-unknown-linux-gnu
+            artifact_prefix: pong 
           - os: windows-latest
             feature: vulkan
-            artifact_prefix: pong.exe
-            target: x86_64-pc-windows-msvc
+            artifact_prefix: pong.exe 
           - os: macos-latest
             feature: metal
-            artifact_prefix: pong
-            target: x86_64-apple-darwin
+            artifact_prefix: pong 
     steps:
     - name: Installing Rust toolchain
       uses: actions-rs/toolchain@v1
@@ -36,7 +33,7 @@ jobs:
           sudo apt-get install -y -qq gcc pkg-config openssl libasound2-dev cmake build-essential python3 libfreetype6-dev libexpat1-dev libxcb-composite0-dev libssl-dev libx11-dev 
     - uses: actions/checkout@v1
     - name: Build
-      run: cargo build --features "${{ matrix.feature }}" --target ${{ matrix.target }}
+      run: cargo build --verbose --no-default-features --features "${{ matrix.feature }}"
     - name: Upload artifact
       uses: actions/upload-artifact@v1.0.0
       with:

@@ -17,5 +17,3 @@ default = ["vulkan"]
 empty = ["amethyst/empty"]
 metal = ["amethyst/metal"]
 vulkan = ["amethyst/vulkan"]
-nightly = ["amethyst/nightly"]
-
