@@ -7,7 +7,7 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-amethyst = "0.13.2"
+amethyst = { git = "https://github.com/amethyst/amethyst", rev = "9f72376a31185cdd1252485a26b94c8a4711d48d" }
 
 [features]
 default = ["vulkan"]
