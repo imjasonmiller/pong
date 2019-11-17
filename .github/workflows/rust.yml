@@ -17,17 +17,17 @@ jobs:
           - os: ubuntu-latest
             feature: vulkan
             archive: tar
-            output: server-x86_64-windows-msvc.zip
+            output: server-x86_64-unknown-linux-gnu
             artifact_prefix: pong 
           - os: windows-latest
             feature: vulkan
             archive: zip
-            output: server-x86_64-unknown-linux-gnu.tar.gz
+            output: server-x86_64-windows-msvc
             artifact_prefix: pong.exe 
           - os: macos-latest
             feature: metal
             archive: tar
-            output: server-x86_64-apple-darwin.tar.gz
+            output: server-x86_64-apple-darwin
             artifact_prefix: pong 
 
     steps:
@@ -49,12 +49,10 @@ jobs:
 
     - name: Pack artifact
       run : |
-          if [[ '${{ matrix.archive }}' == 'tar' ]]; then
-            tar -czvf ${{ matrix.output }} target/release/${{ matrix.artifact_prefix }} config/
-          else
-            7z a ${{ matrix.output }} target/release/${{ matrix.artifact_prefix }} config/
-          fi
-     
+          mkdir ${{ matrix.output }}
+          cp -r config ${{ matrix.output }}/
+          cp target/release/${{ matrix.artifact_prefix }} ${{ matrix.output }}/
+ 
     - name: Upload artifact
       uses: actions/upload-artifact@v1.0.0
       with:
