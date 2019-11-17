@@ -51,7 +51,7 @@ jobs:
       run : |
           mkdir ${{ matrix.output }}
           cp -r config ${{ matrix.output }}/
-          cp target/release/${{ matrix.artifact_prefix }} ${{ matrix.output }}/
+          cp -p target/release/${{ matrix.artifact_prefix }} ${{ matrix.output }}/
  
     - name: Upload artifact
       uses: actions/upload-artifact@v1.0.0
