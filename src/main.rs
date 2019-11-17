@@ -36,6 +36,8 @@ fn main() -> amethyst::Result<()> {
     let game_data = GameDataBuilder::default()
         .with_bundle(input_bundle)?
         .with(systems::PaddleSystem, "paddle_system", &["input_system"])
+        .with(systems::MoveBallSystem, "ball_system", &[])
+        .with(systems::BounceSystem, "collision_system", &["paddle_system", "ball_system"])
         .with_bundle(
             RenderingBundle::<DefaultBackend>::new()
             // The RenderToWindow plugin provides all the scaffolding for opening a window and
