@@ -4,8 +4,11 @@ on: [push]
 
 jobs:
   build:
-    name: Building for ${{ matrix.os }}
+
+    name: Build for ${{ matrix.os }}
+
     runs-on: ${{ matrix.os }}
+
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
@@ -13,29 +16,48 @@ jobs:
         include:
           - os: ubuntu-latest
             feature: vulkan
+            archive: tar
+            output: server-x86_64-windows-msvc.zip
             artifact_prefix: pong 
           - os: windows-latest
             feature: vulkan
+            archive: zip
+            output: server-x86_64-unknown-linux-gnu.tar.gz
             artifact_prefix: pong.exe 
           - os: macos-latest
             feature: metal
+            archive: tar
+            output: server-x86_64-apple-darwin.tar.gz
             artifact_prefix: pong 
+
     steps:
-    - name: Installing Rust toolchain
+    - name: Install Rust toolchain
       uses: actions-rs/toolchain@v1
       with:
         toolchain: ${{ matrix.rust }}
         override: true
-    - name: Installing Ubuntu dependencies
+
+    - name: Install Ubuntu dependencies
       if: matrix.os == 'ubuntu-latest'
       run: |
           sudo apt-get update
           sudo apt-get install -y -qq gcc pkg-config openssl libasound2-dev cmake build-essential python3 libfreetype6-dev libexpat1-dev libxcb-composite0-dev libssl-dev libx11-dev 
+
     - uses: actions/checkout@v1
     - name: Build
-      run: cargo build --verbose --no-default-features --features "${{ matrix.feature }}"
+      run: cargo build --release --no-default-features --features "${{ matrix.feature }}"
+
+    - name: Pack artifact
+      run : |
+          if [[ '${{ matrix.archive }}' == 'tar' ]]; then
+            tar -czvf ${{ matrix.output }} target/release/${{ matrix.artifact_prefix }} config/
+          else
+            7z a ${{ matrix.output }} target/release/${{ matrix.artifact_prefix }} config/
+          fi
+     
     - name: Upload artifact
       uses: actions/upload-artifact@v1.0.0
       with:
-        name: ${{ matrix.os }}
-        path: target/debug/${{ matrix.artifact_prefix }}
+        name: ${{ matrix.output }}
+        path: ${{ matrix.output }}
+
