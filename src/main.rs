@@ -6,9 +6,11 @@ use amethyst::{
         RenderingBundle,
     },
     core::transform::TransformBundle,
+    input::{InputBundle, StringBindings},
     utils::application_root_dir,
 };
 
+mod systems;
 mod pong;
 
 use crate::pong::Pong;
@@ -21,11 +23,19 @@ fn main() -> amethyst::Result<()> {
     // Display configuration
     let display_config = app_root.join("config").join("display.ron");
 
+    // Bindings configuration
+    let binding_path = app_root.join("config").join("bindings.ron");
+
+    let input_bundle = InputBundle::<StringBindings>::new()
+        .with_bindings_from_file(binding_path)?;
+
     let assets_dir = app_root.join("assets");
 
     // Application setup
     let mut world = World::new();
     let game_data = GameDataBuilder::default()
+        .with_bundle(input_bundle)?
+        .with(systems::PaddleSystem, "paddle_system", &["input_system"])
         .with_bundle(
             RenderingBundle::<DefaultBackend>::new()
             // The RenderToWindow plugin provides all the scaffolding for opening a window and
