@@ -47,12 +47,20 @@ jobs:
     - name: Build
       run: cargo build --release --no-default-features --features "${{ matrix.feature }}"
 
-    - name: Pack artifact
-      run : |
-          mkdir ${{ matrix.output }}
-          cp -r config ${{ matrix.output }}/
-          cp -p target/release/${{ matrix.artifact_prefix }} ${{ matrix.output }}/
- 
+    - name: Pack artifact for Linux/macOS
+      if: matrix.os == 'ubuntu-latest' || matrix.os == 'macos-latest'
+      run: |
+        mkdir ${{ matrix.output }}
+        cp -r config ${{ matrix.output }}/
+        cp -p target/release/${{ matrix.artifact_prefix }} ${{ matrix.output }}/
+
+    - name: Pack artifact for Windows
+      if: matrix.os == 'windows-latest'
+      run: |
+        mkdir ${{ matrix.output }}
+        xcopy config ${{ matrix.output }}/ /E /K /Y
+        xcopy target/release/${{ matrix.artifact_prefix }} ${{ matrix.output }}/
+         
     - name: Upload artifact
       uses: actions/upload-artifact@v1.0.0
       with:
